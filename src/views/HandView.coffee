@@ -5,7 +5,6 @@ class window.HandView extends Backbone.View
 
   initialize: ->
     @collection.on 'add remove change', => @render()
-    #this.collection.on('add remove change', this.render, this)
     @render()
 
   render: ->
@@ -13,20 +12,16 @@ class window.HandView extends Backbone.View
     @$el.html @template @collection
     @$el.append @collection.map (card) ->
       new CardView(model: card).$el
+
     smallScore = @collection.scores()[0]
     largeScore = @collection.scores()[1]
-    
     if (smallScore != largeScore && largeScore <= 21)
       @$('.score').text "#{smallScore} or #{largeScore}"
     else
       @$('.score').text "#{smallScore}"
     if smallScore > 21
-      if @collection.isDealer
-        alert "Dealer busts, Player wins!"
-      else 
-        alert "Player busts, Dealer wins!"
-
-    #if (@collection.isDealer)
-
-
-
+      if !@collection.isDealer
+        $('.stand-button').hide()
+        $('.hit-button').hide()
+        $('.history').prepend('<div>Player busts, Dealer wins!</div>');
+        
