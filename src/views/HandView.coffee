@@ -20,7 +20,11 @@ class window.HandView extends Backbone.View
       @$('.score').text "#{smallScore} or #{largeScore}"
     else
       @$('.score').text "#{smallScore}"
-    alert 'bust' if smallScore > 21
+    if smallScore > 21
+      if @collection.isDealer
+        alert "Dealer busts, Player wins!"
+      else 
+        alert "Player busts, Dealer wins!"
 
     #if (@collection.isDealer)
 

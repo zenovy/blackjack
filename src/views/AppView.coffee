@@ -6,28 +6,42 @@ class window.AppView extends Backbone.View
   '
 
   events:
+    'click .newGame-button':->
+      #@model.newGame()
+      @model.initialize()
+      @render()
     'click .hit-button': -> @model.get('playerHand').hit()
     'click .stand-button': ->
       dealerHand = @model.get('dealerHand')
       playerHand = @model.get('playerHand')
-      dealerHand.stand()
-      dealerScore = if dealerHand.scores()[1] > 21 then dealerHand.scores()[0] else dealerHand.scores()[1]
+      dealerScore = dealerHand.stand()
       playerScore = if playerHand.scores()[1] > 21 then playerHand.scores()[0] else playerHand.scores()[1]
-      if(playerScore>dealerScore)
+      if dealerScore > 21
+        alert 'Dealer busts, player wins!'
+      else if playerScore>dealerScore and playerScore<=21
         alert 'player wins!'
-      else 
+      else if playerScore<dealerScore and dealerScore<=21
         alert 'dealer wins!'
+      else 
+        alert 'tie'
       console.log dealerScore
       console.log dealerHand.scores()
       #if @model.get('dealerHand') >= @model.get('playerHand')
 
 
-  initialize: ->
+  initialize: (params) ->
+    @newGameButton = new NewGameView
+    #@history = new GameHistView
+    # @model.on 'gamechange', ->
+    #   console.log 'init new game'
+    #   @initialize()
+    @history = params.history
+    @history.collection = new Histories()
     @render()
 
   render: ->
     @$el.children().detach()
-    @$el.html @template()
+    @$el.prepend @newGameButton.render(), @template(), @history.render()
     @$('.player-hand-container').html new HandView(collection: @model.get 'playerHand').el
     @$('.dealer-hand-container').html new HandView(collection: @model.get 'dealerHand').el
 

@@ -27,5 +27,6 @@ class window.Hand extends Backbone.Collection
     @hit() while @scores()[1] <= 16
     if @hasAce
       @hit() while @scores()[0] <= 16
-    #@calcScore()
+      return @scores()[0]
+    return @scores()[1]
 

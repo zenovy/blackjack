@@ -6,3 +6,8 @@ class window.App extends Backbone.Model
     @set 'playerHand', deck.dealPlayer()
     @set 'dealerHand', deck.dealDealer()
 
+  # newGame: ->
+  #   @initialize()
+  #   console.log 'new game'
+  #   @trigger 'gamechange', @
+
